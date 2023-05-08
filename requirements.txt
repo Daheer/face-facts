@@ -4,3 +4,4 @@ mediapipe
 opencv-python
 ultralytics
 pandas
+pytorch_lightning
