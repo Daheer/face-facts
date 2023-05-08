@@ -16,6 +16,13 @@ from mediapipe.tasks.python import vision
 
 torch.manual_seed(42)
 
+if not os.path.exists('models/age_model.pth') and not os.path.exists('models/gender_model.pth') and not os.path.exists('models/race_model.pth') and not os.path.exists('models/joint_model.pth') :
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1cG_2D4za0Gm6nV0j9p5Vq_8IeTAg6Tzq", output = 'models/age_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1Hwmlu8ubfgz2LPOAwA8xE6EtWxP41tQe", output = 'models/gender_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1m-zXYZe-iYuhBOAKBBPOt7jmdsYAmJIp", output = 'models/race_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1V2fk-7JZYLVfqQ8Xh9gphEGNV5UILEG8", output = 'models/joint_model')
+    
+
 DEMO_IMAGE = 'demo.JPG'
 GENDER_DICT = {
     1: 'Female',
