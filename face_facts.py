@@ -14,6 +14,7 @@ import mediapipe as mp
 from torch.cuda import is_available as gpu_ready
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+import gdown
 
 torch.manual_seed(42)
 
