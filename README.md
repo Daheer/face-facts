@@ -42,7 +42,7 @@ The app is available and can be accessed via two platforms
 
 - Data processing: The dataset exhibited a pronounced class imbalance in the age category, with a dominance of images of infants (0 - 4 years) as compared to other age ranges. This imbalance can adversely affect the performance of regression models that rely on accurate representation of all age groups. To address this issue, I employed a strategic approach that randomly discards 30% of examples containing images of individuals aged < 4. 
 
-- Model selection and training details: For the standalone models, a template convolutional neural was employed as the backbone architecture, with task-specific heads appended for each of the sub-tasks i.e. binary classification for gender prediction, regression for age prediction and multi-class classification for race prediction. The models were trained with separate pytorch lightning trainer modules for 25 epochs each. <br> As for the joint model, a single pytorch lightning trainer was used to train and optimize all three objectives.
+- Model selection and training details: For the standalone models, efficientnet_b0 was employed as the backbone architecture, with task-specific heads appended for each of the sub-tasks i.e. binary classification for gender prediction, regression for age prediction and multi-class classification for race prediction. The models were trained with separate pytorch lightning trainer modules for 25 epochs each. <br> As for the joint model, a single pytorch lightning trainer was used to train and optimize all three objectives.
 After experimentation, I discovered the weighting scheme that performed well as follows: 
     * 0.001 * age loss
     * gender loss
