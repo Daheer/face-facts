@@ -19,10 +19,10 @@ import gdown
 torch.manual_seed(42)
 
 if not os.path.exists('models/age_model.pth') and not os.path.exists('models/gender_model.pth') and not os.path.exists('models/race_model.pth') and not os.path.exists('models/joint_model.pth') :
-    gdown.download(url = "https://drive.google.com/uc?export=download&id=1cG_2D4za0Gm6nV0j9p5Vq_8IeTAg6Tzq", output = 'models/age_model.pth')
-    gdown.download(url = "https://drive.google.com/uc?export=download&id=1Hwmlu8ubfgz2LPOAwA8xE6EtWxP41tQe", output = 'models/gender_model.pth')
-    gdown.download(url = "https://drive.google.com/uc?export=download&id=1m-zXYZe-iYuhBOAKBBPOt7jmdsYAmJIp", output = 'models/race_model.pth')
-    gdown.download(url = "https://drive.google.com/uc?export=download&id=1V2fk-7JZYLVfqQ8Xh9gphEGNV5UILEG8", output = 'models/joint_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1WPKUImAhEN-0leDbpuSu_DiHwXAF6vIN", output = 'models/age_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1b9gZzqwpHq7liWSVC6LxloFYkIEp20YV", output = 'models/gender_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1--9er5O6Hpe5Ete95lT50BPABTqzrWi2", output = 'models/race_model.pth')
+    gdown.download(url = "https://drive.google.com/uc?export=download&id=1-8QdoEfxC6GIxfBM7P_Scx_vuv8XI5V_", output = 'models/joint_model.pth')
     
 
 DEMO_IMAGE = 'demo.JPG'
@@ -122,7 +122,7 @@ The app is available and can be accessed via two platforms
 
 - Data processing: The dataset exhibited a pronounced class imbalance in the age category, with a dominance of images of infants (0 - 4 years) as compared to other age ranges. This imbalance can adversely affect the performance of regression models that rely on accurate representation of all age groups. To address this issue, I employed a strategic approach that randomly discards 30% of examples containing images of individuals aged < 4. 
 
-- Model selection and training details: For the standalone models, a template convolutional neural was employed as the backbone architecture, with task-specific heads appended for each of the sub-tasks i.e. binary classification for gender prediction, regression for age prediction and multi-class classification for race prediction. The models were trained with separate pytorch lightning trainer modules for 25 epochs each. <br> As for the joint model, a single pytorch lightning trainer was used to train and optimize all three objectives.
+- Model selection and training details: For the standalone models, efficientnet_b0 was employed as the backbone architecture, with task-specific heads appended for each of the sub-tasks i.e. binary classification for gender prediction, regression for age prediction and multi-class classification for race prediction. The models were trained with separate pytorch lightning trainer modules for 25 epochs each. <br> As for the joint model, a single pytorch lightning trainer was used to train and optimize all three objectives.
 After experimentation, I discovered the weighting scheme that performed well as follows: 
     * 0.001 * age loss
     * gender loss
