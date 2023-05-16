@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch
 import pytorch_lightning as pl
 import torch.nn.functional as F
-class CustomModelMain(nn.Module):
+class CustomModelMain_Old(nn.Module):
     def __init__(self, problem_type, n_classes):
         super().__init__()
         if problem_type == 'Classification' and n_classes == 1:
@@ -40,10 +40,37 @@ class CustomModelMain(nn.Module):
         x = self.fc2(x)
         x = self.output(x)
         return x
+class CustomModelMain_New(nn.Module):
+  def __init__(self, problem_type, n_classes):
+    super().__init__()
+    if problem_type == 'Classification' and n_classes == 1:
+      output = nn.Sigmoid()
+    elif problem_type == 'Regression' and n_classes == 1:
+      output = nn.ReLU()
+    elif problem_type == 'Classification' and n_classes > 1:
+      output = nn.Softmax(dim = 1)
+    
+    self.backbone = timm.create_model('efficientnet_b0', pretrained = True, num_classes = n_classes)
+    for name, param in self.backbone.named_parameters():
+      if name.startswith('blocks'):
+        if not 'blocks.5' in name:
+          param.requires_grad = False
+        else:
+          param.requires_grad = True
+    num_features = self.backbone.classifier.in_features
+    self.backbone.classifier = nn.Sequential(
+        nn.Linear(num_features, 256),
+        nn.ReLU(),
+        nn.Linear(256, n_classes),
+        output
+    )
+  def forward(self, x):
+    x = self.backbone(x)
+    return x
 class age_lightning(pl.LightningModule):
     def __init__(self):
         super().__init__()
-        self.model = CustomModelMain('Regression', 1)
+        self.model = CustomModelMain_New('Regression', 1)
     def forward(self, x):
         return self.model(x)
     def training_step(self, batch, batch_idx):
@@ -65,7 +92,7 @@ class age_lightning(pl.LightningModule):
 class gender_lightning(pl.LightningModule):
     def __init__(self):
         super().__init__()
-        self.model = CustomModelMain('Classification', 1)
+        self.model = CustomModelMain_New('Classification', 1)
     def forward(self, x):
         return self.model(x)
     def training_step(self, batch, batch_idx):
@@ -90,7 +117,7 @@ class gender_lightning(pl.LightningModule):
 class race_lightning(pl.LightningModule):
     def __init__(self):
         super().__init__()
-        self.model = CustomModelMain('Classification', 5)
+        self.model = CustomModelMain_New('Classification', 5)
     def forward(self, x):
         return self.model(x)
     def training_step(self, batch, batch_idx):
@@ -109,7 +136,7 @@ class race_lightning(pl.LightningModule):
         y_val = y[:, 2]
         y_hat = self(x)
         y_oh = F.one_hot(y_val, num_classes = 5)
-        loss = F.cross_entropy(y_hat, y_oh.float())
+        loss = F.cross_entropy(y_hat.log(), y_oh.float())
         preds = y_hat.argmax(dim = 1)
         acc = torch.eq(y_val, preds).float().mean()
         self.log('valid loss', loss, prog_bar = True)
@@ -119,9 +146,9 @@ class race_lightning(pl.LightningModule):
 class Ultimate_Lightning(pl.LightningModule):
   def __init__(self):
     super().__init__()
-    self.age_model = CustomModelMain('Regression', 1)
-    self.gender_model = CustomModelMain('Classification', 1)
-    self.race_model = CustomModelMain('Classification', 5)
+    self.age_model = CustomModelMain_New('Regression', 1)
+    self.gender_model = CustomModelMain_New('Classification', 1)
+    self.race_model = CustomModelMain_New('Classification', 5)
   def forward(self, x):
     return self.age_model(x), self.gender_model(x), self.race_model(x)
   def training_step(self, batch, batch_idx):
