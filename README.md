@@ -15,7 +15,7 @@ The app carries out prediction using two methods, the first employs a model that
 Additionally, the app lets users access more in-depth details, including visualizing the selected face-of-interest, the confidence level of the gender prediction and the probability distribution of the person's race.
 
 The app is available and can be accessed via two platforms
-- [`Hugging Face Spaces`](https://https://deedax-face-facts.hf.space/)
+- [`Hugging Face Spaces`](https://deedax-face-facts.hf.space/)
 - [`Render`](https://face-facts.onrender.com/)
 
 # Features
